@@ -8,7 +8,9 @@ const bodyParser = require("body-parser");
 const db = require("./config");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cors());
+app.use(cors({
+  origin: "https://automatic-irrigation-system-web-app.vercel.app"
+}));
 
 app.get("/", (req, res) => {
   res.send("Server is up and running!");
