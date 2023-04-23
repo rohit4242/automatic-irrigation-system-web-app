@@ -56,7 +56,7 @@ const SetTimer = () => {
   };
 
   const handleRemoveAlarm = (index) => {
-    axios.delete(`${BASE_API_URL}${index}`).then((response) => {
+    axios.delete(`${BASE_API_URL}alarms/${index}`).then((response) => {
       setAlarms(alarms.filter((alarm, i) => i !== index));
       setMessage(response.data.message);
     });
