@@ -16,7 +16,7 @@ const SignIn = () => {
     try {
       setLoading(true);
       await handleLogin(email, password);
-      navigate("/Dashboard");
+      navigate("/");
     } catch (error) {
       setError(error.message);
     }
@@ -28,7 +28,7 @@ const SignIn = () => {
     setError("");
     try {
       await handleGoogleSignIn();
-      navigate("/Dashboard");
+      navigate("/");
     } catch (error) {
       setError(error.message);
     }
