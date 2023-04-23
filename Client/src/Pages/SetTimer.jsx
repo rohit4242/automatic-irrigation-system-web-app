@@ -15,7 +15,7 @@ const SetTimer = () => {
   const [message, setMessage] = useState("");
   const { alarms, setAlarms } = useUserAuth();
   const BASE_API_URL =
-    "https://automatic-irrigation-system-web-app-backend.vercel.app/";
+    "https://automatic-irrigation-system-web-app.vercel.app/";
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentTime(new Date().toLocaleTimeString());
