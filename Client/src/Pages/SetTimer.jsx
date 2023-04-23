@@ -28,7 +28,7 @@ const SetTimer = () => {
 
   useEffect(() => {
     const fetchTimerData = async () => {
-      const response = await axios.get("http://localhost:4000/timer");
+      const response = await axios.get("https://automatic-irrigation-system-web-app-backend.vercel.app/timer");
       setMessage(response.data.message);
     };
     fetchTimerData();
@@ -48,7 +48,7 @@ const SetTimer = () => {
       duration,
     };
 
-    axios.post("http://localhost:4000/alarms", newAlarm).then((response) => {
+    axios.post("https://automatic-irrigation-system-web-app-backend.vercel.app/alarms", newAlarm).then((response) => {
       setAlarms([...alarms, newAlarm]);
       console.log(response.data);
       setMessage(response.data.message);
@@ -56,7 +56,7 @@ const SetTimer = () => {
   };
 
   const handleRemoveAlarm = (index) => {
-    axios.delete(`http://localhost:4000/alarms/${index}`).then((response) => {
+    axios.delete(`https://automatic-irrigation-system-web-app-backend.vercel.app/${index}`).then((response) => {
       setAlarms(alarms.filter((alarm, i) => i !== index));
       setMessage(response.data.message);
     });
