@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "proxy":"",
+  "proxy":"https://automatic-irrigation-system-web-app-server.vercel.app/",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
