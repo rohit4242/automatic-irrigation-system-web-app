@@ -17,6 +17,11 @@ app.get("/", (req, res) => {
 // define the endpoint to handle the alarms
 let alarms = []; // initialize an empty array to hold the alarms
 app.post("/alarms", (req, res) => {
+  res.setHeader(
+    "Access-Control-Allow-Origin",
+    "https://automatic-irrigation-system-web-app.vercel.app/"
+  );
+
   const { hours, minutes, amPm, duration } = req.body;
 
   const newAlarm = {
@@ -37,6 +42,11 @@ let message = ""; // initialize the message variable to an empty string
 let newTime = {};
 
 app.get("/timer", (req, res) => {
+  res.setHeader(
+    "Access-Control-Allow-Origin",
+    "https://automatic-irrigation-system-web-app.vercel.app/"
+  );
+
   const now = new Date();
   const currentAlarm = alarms.find((alarm) => {
     let [hours, minutes] = alarm.time.split(":");
@@ -91,6 +101,11 @@ app.get("/timer", (req, res) => {
 
 // define the endpoint to handle the remove alarm feature
 app.delete("/alarms/:index", (req, res) => {
+  res.setHeader(
+    "Access-Control-Allow-Origin",
+    "https://automatic-irrigation-system-web-app.vercel.app/"
+  );
+
   const { index } = req.params;
   alarms = alarms.filter((alarm, i) => i !== index);
   console.log("Alarm is off");
