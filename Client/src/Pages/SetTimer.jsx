@@ -28,8 +28,18 @@ const SetTimer = () => {
 
   useEffect(() => {
     const fetchTimerData = async () => {
-      const response = await axios.get(`${BASE_API_URL}timer`);
-      setMessage(response.data.message);
+      try {
+        const response = await fetch(`${BASE_API_URL}timer`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const data = await response.json();
+        setMessage(data.message);
+      } catch (error) {
+        console.error(error);
+      }
     };
     fetchTimerData();
 
@@ -48,20 +58,36 @@ const SetTimer = () => {
       duration,
     };
 
-    axios.post(`${BASE_API_URL}alarms`, newAlarm).then((response) => {
-      setAlarms([...alarms, newAlarm]);
-      console.log(response.data);
-      setMessage(response.data.message);
-    });
+    fetch(`${BASE_API_URL}alarms`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newAlarm),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setAlarms([...alarms, newAlarm]);
+        console.log(data);
+        setMessage(data.message);
+      })
+      .catch((error) => console.error(error));
   };
 
   const handleRemoveAlarm = (index) => {
-    axios.delete(`${BASE_API_URL}alarms/${index}`).then((response) => {
-      setAlarms(alarms.filter((alarm, i) => i !== index));
-      setMessage(response.data.message);
-    });
+    fetch(`${BASE_API_URL}alarms/${index}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setAlarms(alarms.filter((alarm, i) => i !== index));
+        setMessage(data.message);
+      })
+      .catch((error) => console.error(error));
   };
-
   return (
     <div className="h-screen ">
       <h1 className="my-4 text-3xl font-medium text-center text-teal-500">
