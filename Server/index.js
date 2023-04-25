@@ -31,6 +31,7 @@ app.post("/alarms", (req, res) => {
     time: hours + ":" + minutes,
   };
 
+  console.log(newAlarm)
   alarms.push(newAlarm);
   res.status(201).json({ message: "Alarm added successfully!" });
 });
