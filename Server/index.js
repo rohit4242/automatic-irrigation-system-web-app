@@ -34,13 +34,16 @@ app.get("/timer", (req, res) => {
   const currentAlarm = alarms.find((alarm) => {
     const [hours, minutes] = alarm.time.split(":");
     newTime = { hours, minutes, amPm: alarm.amPm, duration: alarm.duration };
-    return (
+    console.log(newTime);
+    const isCurrentAlarm =
       convertTo12HourFormat(now.getHours()) === parseInt(hours) &&
-      now.getMinutes() === parseInt(minutes)
-    );
+      now.getMinutes() === parseInt(minutes);
+
+    console.log(isCurrentAlarm);
+    return isCurrentAlarm;
   });
 
-  if (currentAlarm || playing) {
+  if (currentAlarm || playing === true) {
     playing = true;
     message = "Your Timer is Started";
     startMotor();
@@ -70,9 +73,9 @@ function convertTo12HourFormat(hours) {
   if (hours === 0) {
     return 12;
   } else if (hours > 12) {
-    return hours - 12;
+    return parseInt(hours - 12);
   } else {
-    return hours;
+    return parseInt(hours);
   }
 }
 
@@ -88,6 +91,7 @@ function shouldTurnOffTimer(now) {
   if (newHours === 0) {
     newHours = 12;
   }
+
   return (
     convertTo12HourFormat(now.getHours()) === parseInt(newHours) &&
     now.getMinutes() === parseInt(newMinutes)
