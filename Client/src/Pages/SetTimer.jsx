@@ -15,7 +15,7 @@ const SetTimer = () => {
   const [message, setMessage] = useState("");
   const { alarms, setAlarms } = useUserAuth();
   const BASE_API_URL =
-    "http://localhost:4000/";
+    "https://automatic-irrigation-system-web-app-server.vercel.app/";
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentTime(new Date().toLocaleTimeString());
@@ -43,8 +43,10 @@ const SetTimer = () => {
       minutes,
       amPm,
       duration,
+      time: hours + ":" + minutes
     };
 
+    console.log(alarms)
     axios.post(BASE_API_URL + "alarms", newAlarm).then((response) => {
       setAlarms([...alarms, newAlarm]);
       console.log(response.data);

@@ -21,14 +21,14 @@ app.get("/", (req, res) => {
 });
 
 app.post("/alarms", (req, res) => {
-  const {hours, minutes, amPm, duration } = req.body;
+  const {hours, minutes, amPm, duration,time } = req.body;
   console.log(hours,minutes)
   const newAlarm = {
     hours:hours,
     minutes:minutes,
     amPm:amPm,
     duration:duration,
-    time: hours + ":" + minutes,
+    time: time,
   };
 
   console.log(newAlarm);
@@ -41,10 +41,10 @@ app.get("/timer", (req, res) => {
   const currentAlarm = alarms.find((alarm) => {
     let [hours, minutes] = alarm.time.split(":");
     newTime = {
-      time: hours + ":" + minutes,
-      hours: hours,
-      minutes: minutes,
-      duration: alarm.duration,
+      hours:hours,
+      minutes:minutes,
+      amPm:alarm.amPm,
+      duration:alarm.duration,
     };
     return (
       convertTo12HourFormat(now.getHours()) === parseInt(hours) &&
@@ -76,7 +76,7 @@ app.get("/timer", (req, res) => {
   }
 
   if (
-    convertTo12HourFormat(now.getHours()) === parseInt(newHours) &&
+    parseInt(convertTo12HourFormat(now.getHours())) === parseInt(newHours) &&
     now.getMinutes() === parseInt(newMinutes)
   ) {
     console.log("Alarm is off");
