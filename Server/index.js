@@ -61,8 +61,8 @@ app.get("/timer", (req, res) => {
     dbRef.set(true);
   } else {
     message = "No active alarm found";
+    res.json({ alarms: alarms, Hello: "Nothings to hello bro" });
     res.json({ message: message });
-    res.json({ alarms: alarms });
   }
 
   let newMinutes = parseInt(newTime.minutes) + parseInt(newTime.duration);
