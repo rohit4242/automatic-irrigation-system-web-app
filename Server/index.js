@@ -31,7 +31,7 @@ app.post("/alarms", (req, res) => {
     time: hours + ":" + minutes,
   };
 
-  console.log(newAlarm)
+  console.log(newAlarm);
   alarms.push(newAlarm);
   res.status(201).json({ message: "Alarm added successfully!" });
 });
@@ -62,8 +62,7 @@ app.get("/timer", (req, res) => {
   } else {
     message = "No active alarm found";
     res.json({ message: message });
-    message = alarms;
-    res.json(alarms)
+    res.json({ alarms: alarms });
   }
 
   let newMinutes = parseInt(newTime.minutes) + parseInt(newTime.duration);
