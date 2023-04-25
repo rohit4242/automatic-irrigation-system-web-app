@@ -15,7 +15,7 @@ const SetTimer = () => {
   const [message, setMessage] = useState("");
   const { alarms, setAlarms } = useUserAuth();
   const BASE_API_URL =
-    "https://automatic-irrigation-system-web-app-server.vercel.app/";
+    "http://localhost:4000/";
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentTime(new Date().toLocaleTimeString());
@@ -27,15 +27,9 @@ const SetTimer = () => {
   }, []);
 
   useEffect(() => {
-    // const fetchTimerData = async () => {
-    //   const response = await axios.get(BASE_API_URL + "timer");
-    //   setMessage(response.data.message);
-    // };
-    // fetchTimerData();
-
     const interval = setInterval(() => {
-      // fetchTimerData();
       axios.get(BASE_API_URL + "timer").then((response) => {
+        console.log(response.data);
         setMessage(response.data.message);
       });
     }, 2000);
@@ -61,6 +55,8 @@ const SetTimer = () => {
   const handleRemoveAlarm = (index) => {
     axios.delete(BASE_API_URL + "alarms/" + index).then((response) => {
       setAlarms(alarms.filter((alarm, i) => i !== index));
+      console.log(response.data);
+
       setMessage(response.data.message);
     });
   };

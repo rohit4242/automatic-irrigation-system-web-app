@@ -21,19 +21,19 @@ app.get("/", (req, res) => {
 });
 
 app.post("/alarms", (req, res) => {
-  const { hours, minutes, amPm, duration } = req.body;
-
+  const {hours, minutes, amPm, duration } = req.body;
+  console.log(hours,minutes)
   const newAlarm = {
-    hours,
-    minutes,
-    amPm,
-    duration,
+    hours:hours,
+    minutes:minutes,
+    amPm:amPm,
+    duration:duration,
     time: hours + ":" + minutes,
   };
 
   console.log(newAlarm);
   alarms.push(newAlarm);
-  res.status(201).json({ message: "Alarm added successfully!" });
+  res.status(201).json({ message: "Alarm added successfully!",alarms:alarms});
 });
 
 app.get("/timer", (req, res) => {
@@ -61,8 +61,7 @@ app.get("/timer", (req, res) => {
     dbRef.set(true);
   } else {
     message = "No active alarm found";
-    res.json({ alarms: alarms, Hello: "Nothings to hello bro" });
-    res.json({ message: message });
+    res.json({ alarms: alarms, Hello: "Nothings to hello bro",message });
   }
 
   let newMinutes = parseInt(newTime.minutes) + parseInt(newTime.duration);
@@ -85,7 +84,7 @@ app.get("/timer", (req, res) => {
     message = "Your Timer is OFF";
     const dbRef = db.ref("Motor Status/motor_status");
     dbRef.set(false);
-    res.json({ message: message });
+    res.json({ message: message,alarms:alarms });
 
     alarms = alarms.filter((alarm) => {
       return alarm.time !== newTime.time;
@@ -101,7 +100,7 @@ app.delete("/alarms/:index", (req, res) => {
   message = "Your Timer is OFF";
   const dbRef = db.ref("Motor Status/motor_status");
   dbRef.set(false);
-  res.json({ message: "Alarm removed successfully!" });
+  res.json({ message: "Alarm removed successfully!",alarms:alarms });
 });
 
 function convertTo12HourFormat(hours) {
