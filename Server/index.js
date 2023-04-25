@@ -2,11 +2,15 @@ const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const db = require("./config");
+const moment = require("moment-timezone");
 
 const app = express();
 const port = process.env.PORT || 4000;
 
 dotenv.config();
+
+// Set timezone to UTC
+moment.tz.setDefault("UTC");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
