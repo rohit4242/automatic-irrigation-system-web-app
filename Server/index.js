@@ -62,6 +62,8 @@ app.get("/timer", (req, res) => {
   } else {
     message = "No active alarm found";
     res.json({ message: message });
+    message = alarms;
+    res.json(alarms)
   }
 
   let newMinutes = parseInt(newTime.minutes) + parseInt(newTime.duration);
