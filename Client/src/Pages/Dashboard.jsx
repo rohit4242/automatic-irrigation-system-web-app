@@ -9,11 +9,15 @@ import { useUserAuth } from "../Contexts/AuthContext";
 
 const Index = () => {
   const { sensorData } = useUserAuth();
-  console.log(sensorData)
+  console.log(sensorData);
   const dummyData = [
     { name: "Temperature", value: sensorData?.Temp, color: "#36A2EB" },
     { name: "Humidity", value: sensorData?.Humidity, color: "#2ecc71" },
-    { name: "Soil Moisture", value: sensorData?.SoilMoisture, color: "#9b59b6" },
+    {
+      name: "Soil Moisture",
+      value: sensorData?.SoilMoisture,
+      color: "#9b59b6",
+    },
   ];
 
   return (

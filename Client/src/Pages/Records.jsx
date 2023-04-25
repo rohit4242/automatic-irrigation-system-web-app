@@ -27,17 +27,18 @@ const Records = () => {
           </tr>
         </thead>
         <tbody>
-          {allSensorData && Object.keys(allSensorData).map((key, index) => {
-            const sensor = allSensorData[key];
-            return (
-              <tr key={key}>
-                <td className="px-6 py-4">{index + 1}</td>
-                <td className="px-6 py-4">{sensor.sensor_name}</td>
-                <td className="px-6 py-4">{sensor.type}</td>
-                <td className="px-6 py-4">{sensor.value}</td>
-              </tr>
-            );
-          })}
+          {allSensorData &&
+            Object.keys(allSensorData).map((key, index) => {
+              const sensor = allSensorData[key];
+              return (
+                <tr key={key}>
+                  <td className="px-6 py-4">{index + 1}</td>
+                  <td className="px-6 py-4">{sensor.sensor_name}</td>
+                  <td className="px-6 py-4">{sensor.type}</td>
+                  <td className="px-6 py-4">{sensor.value}</td>
+                </tr>
+              );
+            })}
         </tbody>
       </table>
     </div>

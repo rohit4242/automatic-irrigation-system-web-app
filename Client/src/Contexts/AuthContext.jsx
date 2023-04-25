@@ -7,7 +7,7 @@ import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
 } from "firebase/auth";
-import { auth, db } from "../../firebase";
+import { auth, db } from "../firebase";
 import { onValue, ref, set } from "firebase/database";
 
 const UserAuthContext = createContext();
@@ -95,23 +95,19 @@ export function UserAuthContextProvider({ children }) {
 
   // when the motorstatus is change then update the database with the new motor status value
   useEffect(() => {
-    if(motorStatus == "ON"){
+    if (motorStatus == "ON") {
       const dbRef = ref(db, "Motor Status");
       set(dbRef, {
         motor_status: true,
       });
-    }
-    else if(motorStatus == "OFF"){
+    } else if (motorStatus == "OFF") {
       const dbRef = ref(db, "Motor Status");
       set(dbRef, {
         motor_status: false,
       });
     }
+  }, [motorStatus]);
 
-    
-  },[motorStatus]);
-
- 
   if (!isInitialized) {
     // Show loading spinner or something until Firebase is initialized
     return <div>Loading...</div>;

@@ -9,7 +9,7 @@ const port = process.env.PORT || 4000;
 
 dotenv.config();
 
-// Set timezone to UTC
+// Set timezone to Pacific Time Zone
 moment.tz.setDefault("America/Los_Angeles");
 
 app.use(express.json());
@@ -34,14 +34,15 @@ app.post("/alarms", (req, res) => {
 });
 
 app.get("/timer", (req, res) => {
-  const now = new Date();
+  const now = moment().tz("Asia/Kolkata");
   const currentAlarm = alarms.find((alarm) => {
     const [hours, minutes] = alarm.time.split(":");
     newTime = { hours, minutes, amPm: alarm.amPm, duration: alarm.duration };
     console.log(newTime);
+
     const isCurrentAlarm =
-      convertTo12HourFormat(now.getHours()) === parseInt(hours) &&
-      now.getMinutes() === parseInt(minutes);
+      convertTo12HourFormat(now.hours()) === parseInt(hours) &&
+      now.minutes() === parseInt(minutes);
 
     console.log(isCurrentAlarm);
     return isCurrentAlarm;
@@ -97,8 +98,8 @@ function shouldTurnOffTimer(now) {
   }
 
   return (
-    convertTo12HourFormat(now.getHours()) === parseInt(newHours) &&
-    now.getMinutes() === parseInt(newMinutes)
+    convertTo12HourFormat(now.hours()) === parseInt(newHours) &&
+    now.minutes() === parseInt(newMinutes)
   );
 }
 
