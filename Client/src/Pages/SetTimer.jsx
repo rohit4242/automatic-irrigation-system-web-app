@@ -14,9 +14,7 @@ const SetTimer = () => {
 
   const [message, setMessage] = useState("");
   const { alarms, setAlarms } = useUserAuth();
-  const BASE_API_URL =
-    "https://automatic-irrigation-system-web-app-server.vercel.app/";
-  const PROXY_URL = "https://cors-anywhere.herokuapp.com/";
+  const BASE_API_URL ="https://automatic-irrigation-system-web-app-server.vercel.app/";
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentTime(new Date().toLocaleTimeString());
@@ -29,7 +27,7 @@ const SetTimer = () => {
 
   useEffect(() => {
     const fetchTimerData = async () => {
-      const response = await axios.get(PROXY_URL + BASE_API_URL + "timer");
+      const response = await axios.get(BASE_API_URL+"timer");
       setMessage(response.data.message);
     };
     fetchTimerData();
@@ -50,7 +48,7 @@ const SetTimer = () => {
     };
 
     axios
-      .post(PROXY_URL + BASE_API_URL + "alarms", newAlarm)
+      .post(BASE_API_URL+"alarms", newAlarm)
       .then((response) => {
         setAlarms([...alarms, newAlarm]);
         console.log(response.data);
@@ -60,7 +58,7 @@ const SetTimer = () => {
 
   const handleRemoveAlarm = (index) => {
     axios
-      .delete(PROXY_URL + BASE_API_URL + "alarms/" + index)
+      .delete(BASE_API_URL+"alarms/" + index)
       .then((response) => {
         setAlarms(alarms.filter((alarm, i) => i !== index));
         setMessage(response.data.message);
