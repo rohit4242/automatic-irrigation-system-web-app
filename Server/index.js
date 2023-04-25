@@ -1,14 +1,15 @@
 const express = require("express");
 const cors = require("cors");
-require("dotenv").config();
+const dotenv = require("dotenv");
+const db = require("./config");
 
 const app = express();
 const port = process.env.PORT || 4000;
-const db = require("./config");
+
+dotenv.config();
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-// Allow requests from all domains
 app.use(cors());
 
 let alarms = [];
@@ -21,67 +22,39 @@ app.get("/", (req, res) => {
 });
 
 app.post("/alarms", (req, res) => {
-  const {hours, minutes, amPm, duration } = req.body;
-  const newAlarm = {
-    hours: hours,
-    minutes: minutes,
-    amPm,
-    duration: duration,
-    time: hours + ':' + minutes,
-  };
+  const { hours, minutes, amPm, duration } = req.body;
+  const time = `${hours}:${minutes}`;
 
-  alarms.push(newAlarm);
-  res.status(201).json({ message: "Alarm added successfully!",alarms:alarms});
+  alarms.push({ hours, minutes, amPm, duration, time });
+  res.status(201).json({ message: "Alarm added successfully!", alarms });
 });
 
 app.get("/timer", (req, res) => {
   const now = new Date();
   const currentAlarm = alarms.find((alarm) => {
-    let [hours, minutes] = alarm.time.split(":");
-    newTime = {
-      hours: hours,
-      minutes: minutes,
-      amPm: alarm.amPm,
-      duration: alarm.duration,
-    };
+    const [hours, minutes] = alarm.time.split(":");
+    newTime = { hours, minutes, amPm: alarm.amPm, duration: alarm.duration };
     return (
       convertTo12HourFormat(now.getHours()) === parseInt(hours) &&
       now.getMinutes() === parseInt(minutes)
     );
   });
 
-  if (currentAlarm || playing === true) {
+  if (currentAlarm || playing) {
     playing = true;
     message = "Your Timer is Started";
-    res.json({ message: message });
-    const dbRef = db.ref("Motor Status/motor_status");
-    dbRef.set(true);
+    startMotor();
   } else {
     message = "No active alarm found";
-    res.json({ alarms: alarms, Hello: "Nothings to hello bro",message });
   }
 
-  let newMinutes = parseInt(newTime.minutes) + parseInt(newTime.duration);
-  let newHours = parseInt(newTime.hours);
-  if (newMinutes >= 60) {
-    newHours += Math.floor(newMinutes / 60);
-    newMinutes %= 60;
-  }
-  newHours %= 12;
-  if (newHours === 0) {
-    newHours = 12;
-  }
-
-  if (
-    convertTo12HourFormat(now.getHours()) === parseInt(newHours) &&
-    now.getMinutes() === parseInt(newMinutes)
-  ) {
+  if (shouldTurnOffTimer(now)) {
     playing = false;
     message = "Your Timer is OFF";
-    const dbRef = db.ref("Motor Status/motor_status");
-    dbRef.set(false);
-    res.json({ message: message,alarms:alarms });
+    stopMotor();
   }
+
+  res.json({ message, alarms });
 });
 
 app.delete("/alarms/:index", (req, res) => {
@@ -89,9 +62,8 @@ app.delete("/alarms/:index", (req, res) => {
   alarms = alarms.filter((alarm, i) => i !== parseInt(index));
   playing = false;
   message = "Your Timer is OFF";
-  const dbRef = db.ref("Motor Status/motor_status");
-  dbRef.set(false);
-  res.json({ message: "Alarm removed successfully!",alarms:alarms });
+  stopMotor();
+  res.json({ message: "Alarm removed successfully!", alarms });
 });
 
 function convertTo12HourFormat(hours) {
@@ -102,6 +74,34 @@ function convertTo12HourFormat(hours) {
   } else {
     return hours;
   }
+}
+
+function shouldTurnOffTimer(now) {
+  const { hours, minutes, duration } = newTime;
+  let newMinutes = parseInt(minutes) + parseInt(duration);
+  let newHours = parseInt(hours);
+  if (newMinutes >= 60) {
+    newHours += Math.floor(newMinutes / 60);
+    newMinutes %= 60;
+  }
+  newHours %= 12;
+  if (newHours === 0) {
+    newHours = 12;
+  }
+  return (
+    convertTo12HourFormat(now.getHours()) === parseInt(newHours) &&
+    now.getMinutes() === parseInt(newMinutes)
+  );
+}
+
+function startMotor() {
+  const dbRef = db.ref("Motor Status/motor_status");
+  dbRef.set(true);
+}
+
+function stopMotor() {
+  const dbRef = db.ref("Motor Status/motor_status");
+  dbRef.set(false);
 }
 
 app.listen(port, () => {
