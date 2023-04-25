@@ -10,7 +10,7 @@ const port = process.env.PORT || 4000;
 dotenv.config();
 
 // Set timezone to UTC
-moment.tz.setDefault("UTC");
+moment.tz.setDefault("America/Los_Angeles");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
