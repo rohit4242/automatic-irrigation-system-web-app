@@ -27,15 +27,18 @@ const SetTimer = () => {
   }, []);
 
   useEffect(() => {
-    const fetchTimerData = async () => {
-      const response = await axios.get(BASE_API_URL + "timer");
-      setMessage(response.data.message);
-    };
-    fetchTimerData();
+    // const fetchTimerData = async () => {
+    //   const response = await axios.get(BASE_API_URL + "timer");
+    //   setMessage(response.data.message);
+    // };
+    // fetchTimerData();
 
     const interval = setInterval(() => {
-      fetchTimerData();
-    }, 5000);
+      // fetchTimerData();
+      axios.get(BASE_API_URL + "timer").then((response) => {
+        setMessage(response.data.message);
+      });
+    }, 2000);
 
     return () => clearInterval(interval);
   }, [setMessage]);
