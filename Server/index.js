@@ -21,17 +21,15 @@ app.get("/", (req, res) => {
 });
 
 app.post("/alarms", (req, res) => {
-  const {hours, minutes, amPm, duration,time } = req.body;
-  console.log(hours,minutes)
+  const {hours, minutes, amPm, duration } = req.body;
   const newAlarm = {
     hours: hours,
     minutes: minutes,
     amPm,
     duration: duration,
-    time,
+    time: hours + ':' + minutes,
   };
 
-  console.log(newAlarm);
   alarms.push(newAlarm);
   res.status(201).json({ message: "Alarm added successfully!",alarms:alarms});
 });
@@ -53,7 +51,6 @@ app.get("/timer", (req, res) => {
   });
 
   if (currentAlarm || playing === true) {
-    console.log("Alarm is on");
     playing = true;
     message = "Your Timer is Started";
     res.json({ message: message });
@@ -79,7 +76,6 @@ app.get("/timer", (req, res) => {
     convertTo12HourFormat(now.getHours()) === parseInt(newHours) &&
     now.getMinutes() === parseInt(newMinutes)
   ) {
-    console.log("Alarm is off");
     playing = false;
     message = "Your Timer is OFF";
     const dbRef = db.ref("Motor Status/motor_status");
@@ -91,7 +87,6 @@ app.get("/timer", (req, res) => {
 app.delete("/alarms/:index", (req, res) => {
   const { index } = req.params;
   alarms = alarms.filter((alarm, i) => i !== parseInt(index));
-  console.log("Alarm is off");
   playing = false;
   message = "Your Timer is OFF";
   const dbRef = db.ref("Motor Status/motor_status");

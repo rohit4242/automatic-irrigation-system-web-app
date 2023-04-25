@@ -44,7 +44,6 @@ const SetTimer = () => {
       minutes,
       amPm,
       duration,
-      time: hours + ":" + minutes,
     };
 
     console.log(alarms);
