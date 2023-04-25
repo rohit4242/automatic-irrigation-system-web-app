@@ -11,10 +11,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
 // Add a middleware to allow requests from all domains
-app.use(cors({
-  origin: 'http://localhost:5173'
-}));
-
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 
 app.get("/", (req, res) => {
   res.send("Server is up and running!");
