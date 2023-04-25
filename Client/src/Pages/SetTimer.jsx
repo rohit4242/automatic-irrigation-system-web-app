@@ -14,7 +14,8 @@ const SetTimer = () => {
 
   const [message, setMessage] = useState("");
   const { alarms, setAlarms } = useUserAuth();
-  const BASE_API_URL ="https://automatic-irrigation-system-web-app-server-o339xwvgj-rohit4242.vercel.app/";
+  const BASE_API_URL =
+    "https://automatic-irrigation-system-web-app-server-obmauriba-rohit4242.vercel.app/";
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentTime(new Date().toLocaleTimeString());
@@ -27,7 +28,7 @@ const SetTimer = () => {
 
   useEffect(() => {
     const fetchTimerData = async () => {
-      const response = await axios.get(BASE_API_URL+"timer");
+      const response = await axios.get(BASE_API_URL + "timer");
       setMessage(response.data.message);
     };
     fetchTimerData();
@@ -47,22 +48,18 @@ const SetTimer = () => {
       duration,
     };
 
-    axios
-      .post(BASE_API_URL+"alarms", newAlarm)
-      .then((response) => {
-        setAlarms([...alarms, newAlarm]);
-        console.log(response.data);
-        setMessage(response.data.message);
-      });
+    axios.post(BASE_API_URL + "alarms", newAlarm).then((response) => {
+      setAlarms([...alarms, newAlarm]);
+      console.log(response.data);
+      setMessage(response.data.message);
+    });
   };
 
   const handleRemoveAlarm = (index) => {
-    axios
-      .delete(BASE_API_URL+"alarms/" + index)
-      .then((response) => {
-        setAlarms(alarms.filter((alarm, i) => i !== index));
-        setMessage(response.data.message);
-      });
+    axios.delete(BASE_API_URL + "alarms/" + index).then((response) => {
+      setAlarms(alarms.filter((alarm, i) => i !== index));
+      setMessage(response.data.message);
+    });
   };
 
   return (
