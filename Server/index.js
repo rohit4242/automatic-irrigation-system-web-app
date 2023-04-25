@@ -85,16 +85,12 @@ app.get("/timer", (req, res) => {
     const dbRef = db.ref("Motor Status/motor_status");
     dbRef.set(false);
     res.json({ message: message,alarms:alarms });
-
-    alarms = alarms.filter((alarm) => {
-      return alarm.time !== newTime.time;
-    });
   }
 });
 
 app.delete("/alarms/:index", (req, res) => {
   const { index } = req.params;
-  alarms = alarms.filter((alarm, i) => i !== index);
+  alarms = alarms.filter((alarm, i) => i !== parseInt(index));
   console.log("Alarm is off");
   playing = false;
   message = "Your Timer is OFF";
