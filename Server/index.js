@@ -24,11 +24,11 @@ app.post("/alarms", (req, res) => {
   const {hours, minutes, amPm, duration,time } = req.body;
   console.log(hours,minutes)
   const newAlarm = {
-    hours:hours,
-    minutes:minutes,
-    amPm:amPm,
-    duration:duration,
-    time: time,
+    hours: parseInt(hours),
+    minutes: parseInt(minutes),
+    amPm,
+    duration: parseInt(duration),
+    time,
   };
 
   console.log(newAlarm);
@@ -41,10 +41,10 @@ app.get("/timer", (req, res) => {
   const currentAlarm = alarms.find((alarm) => {
     let [hours, minutes] = alarm.time.split(":");
     newTime = {
-      hours:hours,
-      minutes:minutes,
-      amPm:alarm.amPm,
-      duration:alarm.duration,
+      hours: parseInt(hours),
+      minutes: parseInt(minutes),
+      amPm: alarm.amPm,
+      duration: parseInt(alarm.duration),
     };
     return (
       convertTo12HourFormat(now.getHours()) === parseInt(hours) &&
