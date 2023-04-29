@@ -8,6 +8,7 @@ import NotFound from "../Pages/NotFound";
 import UserInfo from "../Pages/UserInfo";
 import Records from "../Pages/Records";
 import SetTimer from "../Pages/SetTimer";
+import SetCrops from "../Pages/SetCrops";
 const Layout = () => {
   const [menu, setMenu] = useState(true);
   return (
@@ -15,7 +16,7 @@ const Layout = () => {
       <NavBar menu={menu} setMenu={setMenu} />
       <SideBar menu={menu} />
 
-      <div className="p-4 sm:ml-64">
+      <div className="p-4 mt-4 sm:ml-64">
         <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14">
           <Routes>
             <Route path="" element={<HomePage />} />
@@ -23,6 +24,7 @@ const Layout = () => {
             <Route path="/User-Info" element={<UserInfo />} />
             <Route path="/Records" element={<Records />} />
             <Route path="/Set-Timer" element={<SetTimer />} />
+            <Route path="/Set-Crops-and-Threshold-Value" element={<SetCrops />} />
           </Routes>
         </div>
       </div>

@@ -1,10 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useUserAuth } from "../Contexts/AuthContext";
-
 const NavBar = ({ menu, setMenu }) => {
   const [userMenu, setUserMenu] = useState(false);
-  const { handleLogout, user, motorStatus } = useUserAuth();
+  const { handleLogout, user, motorStatus, setMotorStatus } = useUserAuth();
+  const [enabled, setEnabled] = useState(false);
+
+  useEffect(() => {
+    if (enabled) {
+      setMotorStatus("ON");
+    } else {
+      setMotorStatus("OFF");
+    }
+  }, [enabled]);
   const navigate = useNavigate();
   const handleSubmit = () => {
     handleLogout();
@@ -19,39 +27,74 @@ const NavBar = ({ menu, setMenu }) => {
             <button
               type="button"
               onClick={() => setMenu(!menu)}
-              className="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+              className="inline-flex items-center p-2 text-sm text-gray-500 bg-gray-100 rounded-lg md:hidden focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
             >
               <span className="sr-only">Open sidebar</span>
-              <svg
-                className="w-6 h-6"
-                aria-hidden="true"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  clipRule="evenodd"
-                  fillRule="evenodd"
-                  d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"
-                ></path>
-              </svg>
+              {menu ? (
+                <svg
+                  className="w-6 h-6"
+                  aria-hidden="true"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    clipRule="evenodd"
+                    fillRule="evenodd"
+                    d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"
+                  ></path>
+                </svg>
+              ) : (
+                <svg
+                  version="1.1"
+                  id="Layer_1"
+                  xmlns="http://www.w3.org/2000/svg"
+                  x="0px"
+                  y="0px"
+                  className="w-5 h-5"
+                  fill="currentColor"
+                  viewBox="0 0 122.878 122.88"
+                  enable-background="new 0 0 122.878 122.88"
+                >
+                  <g>
+                    <path d="M1.426,8.313c-1.901-1.901-1.901-4.984,0-6.886c1.901-1.902,4.984-1.902,6.886,0l53.127,53.127l53.127-53.127 c1.901-1.902,4.984-1.902,6.887,0c1.901,1.901,1.901,4.985,0,6.886L68.324,61.439l53.128,53.128c1.901,1.901,1.901,4.984,0,6.886 c-1.902,1.902-4.985,1.902-6.887,0L61.438,68.326L8.312,121.453c-1.901,1.902-4.984,1.902-6.886,0 c-1.901-1.901-1.901-4.984,0-6.886l53.127-53.128L1.426,8.313L1.426,8.313z" />
+                  </g>
+                </svg>
+              )}
             </button>
             <Link to="/" className="flex ml-2 md:mr-24">
-              {/* <img
-                src={dustbin_logo}
-                className="w-10 h-10 mr-3"
-                alt="dustbin logo"
-              /> */}
-              <span className="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">
-                AIS
+              <span className="self-center invisible hidden text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white sm:visible sm:inline-flex">
+                Automatic Irrigation System
               </span>
             </Link>
           </div>
           <div className="flex items-center">
-            <div className="p-2 mx-4 rounded-md bg-slate-200">
+            <label
+              htmlFor="toggleThree"
+              className="flex items-center px-2 cursor-pointer select-none"
+            >
+              <div className="relative">
+                <input
+                  type="checkbox"
+                  id="toggleThree"
+                  onChange={() => setEnabled(!enabled)}
+                  checked={enabled}
+                  className="sr-only"
+                />
+
+                <div className="block h-12 w-6 rounded-full bg-[#E5E7EB]"></div>
+                <div
+                  className={`dot absolute left-1 bottom-1 flex h-4 w-4 items-center justify-center rounded-full bg-teal-400 transition ${
+                    enabled ? "-translate-y-6" : "translate-y-0"
+                  }`}
+                ></div>
+              </div>
+            </label>
+
+            <div className="p-2 mx-4 rounded-md bg-slate-200 whitespace-nowrap">
               Motor: <span className="text-teal-500">{motorStatus}</span>
             </div>
-            <div className="flex items-center ml-3 mr-10">
+            <div className="flex items-center ml-3 mr-6">
               <div className="relative ">
                 <button
                   type="button"
