@@ -1,7 +1,27 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { Transition, Dialog } from "@headlessui/react";
-
+import { useUserCrops } from "../Contexts/SetCropsContext";
 const EditDialog = ({ editDialog, setEditDialog }) => {
+  const [data, setData] = useState([]);
+  const [selected, setSelected] = useState(null);
+
+  const { crops } = useUserCrops();
+
+  useEffect(() => {
+    const crop = Object.values(crops).map(
+      ({ name, humidity, soilMoisture, temperature }) => ({
+        name,
+        humidity,
+        soilMoisture,
+        temperature,
+      })
+    );
+    setData(crop);
+  }, [selected, crops]);
+
+  const handleSelect = (e) => {
+    setSelected(e.target.value);
+  };
   return (
     <Transition appear show={editDialog} as={Fragment}>
       <Dialog
@@ -73,13 +93,16 @@ const EditDialog = ({ editDialog, setEditDialog }) => {
                       </label>
                       <select
                         id="crops"
+                        value={selected}
+                        onChange={handleSelect}
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-400 focus:border-teal-400 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-teal-400 dark:focus:border-teal-400"
                       >
-                        <option selected="">Electronics</option>
-                        <option value="TV">TV/Monitors</option>
-                        <option value="PC">PC</option>
-                        <option value="GA">Gaming/Console</option>
-                        <option value="PH">Phones</option>
+                        <option selected="">Select Crops</option>
+                        {data?.map(({ name }) => (
+                          <option key={name} value={name}>
+                            {name}
+                          </option>
+                        ))}
                       </select>
                     </div>
                     <div>
@@ -93,7 +116,7 @@ const EditDialog = ({ editDialog, setEditDialog }) => {
                         type="number"
                         name="temp"
                         id="temp"
-                        //   value="Google"
+                        // value="Google"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-400 focus:border-teal-400 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-teal-400 dark:focus:border-teal-400"
                         placeholder="Enter Your Temperature"
                       />

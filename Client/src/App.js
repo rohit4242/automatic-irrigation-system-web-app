@@ -1,11 +1,12 @@
 import React from "react";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Layout from "./Layout/Layout";
 import NotFound from "./Pages/NotFound";
 import SignIn from "./Pages/SignIn";
 import SignUp from "./Pages/SignUp";
 import { UserAuthContextProvider } from "./Contexts/AuthContext";
 import ProtectedRouter from "./Router/ProtectedRouter";
+import { UserCropsContextProvider } from "./Contexts/SetCropsContext";
 function App() {
   return (
     <UserAuthContextProvider>
@@ -16,11 +17,13 @@ function App() {
           path="/*"
           element={
             <ProtectedRouter>
-              <Layout />
+              <UserCropsContextProvider>
+                <Layout />
+              </UserCropsContextProvider>
             </ProtectedRouter>
           }
         />
-        <Route path="*" element={<NotFound h1={"404"}/>} />
+        <Route path="*" element={<NotFound h1={"404"} />} />
       </Routes>
     </UserAuthContextProvider>
   );

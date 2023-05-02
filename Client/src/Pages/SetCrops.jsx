@@ -1,42 +1,40 @@
 import React, { useEffect, useState, Fragment } from "react";
-import { Combobox, Transition } from "@headlessui/react";
+import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
+
 import EditDialog from "../Components/EditDialog";
 import AddDialog from "../Components/AddDialog";
-const people = [
-  { id: 1, name: "Wade Cooper", temp: 45, humidity: 65, soilMoisture: 1024 },
-  { id: 2, name: "Arlene Mccoy", temp: 55, humidity: 55, soilMoisture: 1024 },
-  { id: 3, name: "Devon Webb", temp: 65, humidity: 45, soilMoisture: 1624 },
-  { id: 4, name: "Tom Cook", temp: 75, humidity: 35, soilMoisture: 1824 },
-  { id: 5, name: "Tanya Fox", temp: 85, humidity: 25, soilMoisture: 8024 },
-  { id: 6, name: "Hellen Schmidt", temp: 95, humidity: 15, soilMoisture: 524 },
-];
+import { useUserCrops } from "../Contexts/SetCropsContext";
+const defaultSelectedItem = { name: "Select Your Crops", value: "" };
 
 const SetCrops = () => {
-  const [selected, setSelected] = useState(people[0]);
-  const [query, setQuery] = useState("");
-  const [currentThresholdValue, setCurrentThresholdValue] = useState(null);
-  // let [isOpen, setIsOpen] = useState(false);
-  const [addDialog,setAddDialog] = useState(false);
-  const [editDialog,setEditDialog] = useState(false);
+  const [addDialog, setAddDialog] = useState(false);
+  const [editDialog, setEditDialog] = useState(false);
+  const [value, setValue] = useState([]);
+  const [selected, setSelected] = useState(defaultSelectedItem);
+  const [currentThresholdValue, setCurrentThresholdValue] = useState([]);
 
+  const { crops } = useUserCrops();
   useEffect(() => {
-    console.log(selected);
-    setCurrentThresholdValue(selected);
-  }, [selected]);
-
-  const filteredPeople =
-    query === ""
-      ? people
-      : people.filter((person) =>
-          person.name
-            .toLowerCase()
-            .replace(/\s+/g, "")
-            .includes(query.toLowerCase().replace(/\s+/g, ""))
-        );
+    if (crops !== null && crops !== undefined) {
+      setCurrentThresholdValue(selected);
+      const crop = Object.values(crops).map((item) => {
+        return {
+          name: item.name,
+          humidity: item.humidity,
+          soilMoisture: item.soilMoisture,
+          temperature: item.temperature,
+        };
+      });
+      setValue(crop);
+    }
+  }, [selected, crops]);
+  
+  
+  
   return (
     <>
-      <div class="w-full max-w-sm bg-zinc-100 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+      <div class="w-full mx-auto max-w-sm bg-zinc-100 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
         <div class="flex justify-end px-4 pt-4">
           <button
             id="dropdownButton"
@@ -60,63 +58,47 @@ const SetCrops = () => {
           <h5 class="mb-1 text-2xl font-medium text-gray-900 dark:text-white">
             Set Crops
           </h5>
-          <div className="my-4">
-            {" "}
-            <Combobox value={selected} onChange={setSelected}>
+          <div className="my-4 w-60">
+            <Listbox value={selected} onChange={setSelected}>
               <div className="relative mt-1">
-                <div className="relative w-full overflow-hidden text-left bg-white rounded-lg shadow-md cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
-                  <Combobox.Input
-                    className="w-full py-2 pl-3 pr-10 leading-5 text-gray-900 border-none rounded-lg text-md focus:ring-0"
-                    displayValue={(person) => person.name}
-                    onChange={(event) => setQuery(event.target.value)}
-                  />
-                  <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
+                <Listbox.Button className="relative w-full py-2 pl-3 pr-10 text-left bg-white rounded-lg shadow-md cursor-default focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
+                  <span className="block truncate">{selected?.name}</span>
+                  <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                     <ChevronUpDownIcon
                       className="w-5 h-5 text-gray-400"
                       aria-hidden="true"
                     />
-                  </Combobox.Button>
-                </div>
+                  </span>
+                </Listbox.Button>
                 <Transition
                   as={Fragment}
                   leave="transition ease-in duration-100"
                   leaveFrom="opacity-100"
                   leaveTo="opacity-0"
-                  afterLeave={() => setQuery("")}
                 >
-                  <Combobox.Options className="absolute w-full py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                    {filteredPeople.length === 0 && query !== "" ? (
-                      <div className="relative px-4 py-2 text-gray-700 cursor-default select-none">
-                        Nothing found.
-                      </div>
-                    ) : (
-                      filteredPeople.map((person) => (
-                        <Combobox.Option
-                          key={person.id}
+                  {value && value.length > 0 ? (
+                    <Listbox.Options className="absolute w-full py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                      {value.map((crops, personIdx) => (
+                        <Listbox.Option
+                          key={personIdx}
                           className={({ active }) =>
-                            `relative cursor-default select-none py-2 pl-10 pr-4 ${
-                              active
-                                ? "bg-teal-600 text-white"
-                                : "text-gray-900"
+                            `relative cursor-default select-none py-2 pl-6 pr-4 ${
+                              active ? "bg-teal-400" : "text-gray-900"
                             }`
                           }
-                          value={person}
+                          value={crops}
                         >
-                          {({ selected, active }) => (
+                          {({ selected }) => (
                             <>
                               <span
                                 className={`block truncate ${
                                   selected ? "font-medium" : "font-normal"
                                 }`}
                               >
-                                {person.name}
+                                {crops?.name}
                               </span>
                               {selected ? (
-                                <span
-                                  className={`absolute inset-y-0 left-0 flex items-center pl-3 ${
-                                    active ? "text-white" : "text-teal-600"
-                                  }`}
-                                >
+                                <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-blue-400">
                                   <CheckIcon
                                     className="w-5 h-5"
                                     aria-hidden="true"
@@ -125,13 +107,22 @@ const SetCrops = () => {
                               ) : null}
                             </>
                           )}
-                        </Combobox.Option>
-                      ))
-                    )}
-                  </Combobox.Options>
+                        </Listbox.Option>
+                      ))}
+                    </Listbox.Options>
+                  ) : (
+                    <Listbox.Options className="absolute w-full py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                      <Listbox.Option
+                        className="relative py-2 pl-6 pr-4 text-gray-500 cursor-default select-none"
+                        value=""
+                      >
+                        <span className="block truncate">No records found</span>
+                      </Listbox.Option>
+                    </Listbox.Options>
+                  )}
                 </Transition>
               </div>
-            </Combobox>
+            </Listbox>
           </div>
 
           <div className="flex flex-col justify-center bg-white border border-gray-200 rounded-md shadow w-60 dark:bg-gray-800 dark:border-gray-700">
@@ -144,7 +135,7 @@ const SetCrops = () => {
               <p>
                 Temperature:
                 <span className="mx-2 text-teal-400">
-                  {currentThresholdValue?.temp}
+                  {currentThresholdValue?.temperature}
                 </span>
               </p>
               <p>
@@ -163,8 +154,10 @@ const SetCrops = () => {
           </div>
 
           <div class="flex mt-4 space-x-3 md:mt-6">
-            <button               onClick={() => setAddDialog(!addDialog)}
- class="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+            <button
+              onClick={() => setAddDialog(!addDialog)}
+              class="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            >
               Add
             </button>
             <button
@@ -176,8 +169,12 @@ const SetCrops = () => {
           </div>
         </div>
       </div>
-      <EditDialog editDialog={editDialog} setEditDialog={setEditDialog} />
-      <AddDialog addDialog={addDialog} setAddDialog={setAddDialog}/>
+      <EditDialog
+        editDialog={editDialog}
+        setEditDialog={setEditDialog}
+        value={value}
+      />
+      <AddDialog addDialog={addDialog} setAddDialog={setAddDialog} />
     </>
   );
 };

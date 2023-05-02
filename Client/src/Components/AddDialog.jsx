@@ -3,11 +3,11 @@ import { Transition, Dialog } from "@headlessui/react";
 import { useUserCrops } from "../Contexts/SetCropsContext";
 const AddDialog = ({ addDialog, setAddDialog }) => {
   const {
-    cropName,
+    name,
     temperature,
     humidity,
     soilMoisture,
-    setCropName,
+    setName,
     setHumidity,
     setTemperature,
     setSoilMoisture,
@@ -87,6 +87,8 @@ const AddDialog = ({ addDialog, setAddDialog }) => {
                         type="text"
                         name="name"
                         id="name"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-400 focus:border-teal-400 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-teal-400 dark:focus:border-teal-400"
                         placeholder="Enter Your Crop"
                       />
@@ -102,6 +104,8 @@ const AddDialog = ({ addDialog, setAddDialog }) => {
                         type="number"
                         name="temp"
                         id="temp"
+                        value={temperature}
+                        onChange={(e) => setTemperature(e.target.value)}
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-400 focus:border-teal-400 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-teal-400 dark:focus:border-teal-400"
                         placeholder="Enter Your Temperature"
                       />
@@ -117,6 +121,8 @@ const AddDialog = ({ addDialog, setAddDialog }) => {
                         type="number"
                         name="hum"
                         id="hum"
+                        value={humidity}
+                        onChange={(e) => setHumidity(e.target.value)}
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-400 focus:border-teal-400 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-teal-400 dark:focus:border-teal-400"
                         placeholder="Enter Your Humidity"
                       />
@@ -132,6 +138,8 @@ const AddDialog = ({ addDialog, setAddDialog }) => {
                         type="number"
                         name="moisture"
                         id="moisture"
+                        value={soilMoisture}
+                        onChange={(e) => setSoilMoisture(e.target.value)}
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-400 focus:border-teal-400 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-teal-400 dark:focus:border-teal-400"
                         placeholder="Enter Your Soil Moisture"
                       />
@@ -142,7 +150,7 @@ const AddDialog = ({ addDialog, setAddDialog }) => {
                   <button
                     type="button"
                     className="inline-flex justify-center px-4 py-2 text-sm font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                    onClick={() => setAddDialog(!addDialog)}
+                    onClick={addCrop}
                   >
                     Add
                   </button>
