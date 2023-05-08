@@ -18,6 +18,7 @@ export function UserAuthContextProvider({ children }) {
   const [isInitialized, setIsInitialized] = useState(false);
   const [sensorData, setSensorData] = useState([]);
   const [allSensorData, setAllSensorData] = useState();
+  const [enabled, setEnabled] = useState(false);
 
   const [motorStatus, setMotorStatus] = useState(null);
   const [alarms, setAlarms] = useState([]);
@@ -95,16 +96,18 @@ export function UserAuthContextProvider({ children }) {
 
   // when the motorstatus is change then update the database with the new motor status value
   useEffect(() => {
-    if (motorStatus == "ON") {
+    if (motorStatus === "ON") {
       const dbRef = ref(db, "Motor Status");
       set(dbRef, {
         motor_status: true,
       });
-    } else if (motorStatus == "OFF") {
+      setEnabled(true);
+    } else if (motorStatus === "OFF") {
       const dbRef = ref(db, "Motor Status");
       set(dbRef, {
         motor_status: false,
       });
+      setEnabled(false);
     }
   }, [motorStatus]);
 
@@ -119,12 +122,14 @@ export function UserAuthContextProvider({ children }) {
     allSensorData,
     motorStatus,
     alarms,
+    enabled,
     handleLogin,
     handleSignUp,
     handleLogout,
     handleGoogleSignIn,
     setMotorStatus,
     setAlarms,
+    setEnabled,
   };
 
   return (

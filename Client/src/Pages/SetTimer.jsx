@@ -64,12 +64,12 @@ const SetTimer = () => {
   };
 
   return (
-    <div className="h-screen ">
+    <div className="h-screen max-w-xl mx-auto">
       <h1 className="my-4 text-3xl font-medium text-center text-teal-500">
         Set Timer
       </h1>
 
-      <div className="flex flex-col items-center justify-center my-4 rounded-md shadow-md bg-slate-200/50">
+      <div className="flex flex-col items-center justify-center my-4 rounded-md shadow-md bg-zinc-100/50">
         <h1 className="my-6 text-2xl font-medium text-teal-500">
           {currentTime}
         </h1>

@@ -5,17 +5,22 @@ import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import EditDialog from "../Components/EditDialog";
 import AddDialog from "../Components/AddDialog";
 import { useUserCrops } from "../Contexts/SetCropsContext";
-const defaultSelectedItem = { name: "Select Your Crops", value: "" };
 
 const SetCrops = () => {
-  const [addDialog, setAddDialog] = useState(false);
-  const [editDialog, setEditDialog] = useState(false);
   const [value, setValue] = useState([]);
-  const [selected, setSelected] = useState(defaultSelectedItem);
-  const [currentThresholdValue, setCurrentThresholdValue] = useState([]);
 
-  const { crops } = useUserCrops();
-  useEffect(() => {
+  const {
+    crops,
+    addDialog,
+    editDialog,
+    setCurrentThresholdValue,
+    currentThresholdValue,
+    selected,
+    setSelected,
+    setAddDialog,
+    setEditDialog,
+  } = useUserCrops();
+  const updateValue = () => {
     if (crops !== null && crops !== undefined) {
       setCurrentThresholdValue(selected);
       const crop = Object.values(crops).map((item) => {
@@ -28,33 +33,16 @@ const SetCrops = () => {
       });
       setValue(crop);
     }
-  }, [selected, crops]);
-  
-  
-  
+  };
+
+  useEffect(() => {
+    updateValue();
+  }, [selected, crops, setCurrentThresholdValue]);
+
   return (
     <>
-      <div class="w-full mx-auto max-w-sm bg-zinc-100 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-        <div class="flex justify-end px-4 pt-4">
-          <button
-            id="dropdownButton"
-            data-dropdown-toggle="dropdown"
-            class="inline-block text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-1.5"
-            type="button"
-          >
-            <span class="sr-only">Open dropdown</span>
-            <svg
-              class="w-6 h-6"
-              aria-hidden="true"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http:www.w3.org/2000/svg"
-            >
-              <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z"></path>
-            </svg>
-          </button>
-        </div>
-        <div class="flex flex-col items-center pb-10">
+      <div class="w-full mx-auto max-w-sm bg-zinc-200/10 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+        <div class="flex flex-col items-center pb-10 mt-6">
           <h5 class="mb-1 text-2xl font-medium text-gray-900 dark:text-white">
             Set Crops
           </h5>
@@ -156,7 +144,7 @@ const SetCrops = () => {
           <div class="flex mt-4 space-x-3 md:mt-6">
             <button
               onClick={() => setAddDialog(!addDialog)}
-              class="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              class="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-teal-500 rounded-lg hover:bg-teal-600 focus:ring-4 focus:outline-none focus:ring-teal-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             >
               Add
             </button>

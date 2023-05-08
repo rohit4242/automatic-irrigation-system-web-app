@@ -3,9 +3,12 @@ import { Transition, Dialog } from "@headlessui/react";
 import { useUserCrops } from "../Contexts/SetCropsContext";
 const EditDialog = ({ editDialog, setEditDialog }) => {
   const [data, setData] = useState([]);
-  const [selected, setSelected] = useState(null);
+  const [selected, setSelected] = useState("");
+  const [temp, setTemp] = useState("");
+  const [hum, setHum] = useState("");
+  const [soilMoisture, setSoilMoisture] = useState("");
 
-  const { crops } = useUserCrops();
+  const { crops, updateCrop, deleteCrop } = useUserCrops();
 
   useEffect(() => {
     const crop = Object.values(crops).map(
@@ -17,11 +20,36 @@ const EditDialog = ({ editDialog, setEditDialog }) => {
       })
     );
     setData(crop);
-  }, [selected, crops]);
 
-  const handleSelect = (e) => {
-    setSelected(e.target.value);
+    const tempValue = crop.filter((e) => e.name === selected);
+    console.log(tempValue);
+    setTemp(tempValue[0]?.temperature);
+    setHum(tempValue[0]?.humidity);
+    setSoilMoisture(tempValue[0]?.soilMoisture);
+  }, [crops, selected]);
+
+  const values = {
+    name: selected,
+    temperature: temp,
+    humidity: hum,
+    soilMoisture: soilMoisture,
   };
+  const handleUpdate = () => {
+    updateCrop(values);
+    setTemp("");
+    setHum("");
+    setSoilMoisture("");
+    setSelected("");
+  };
+
+  const handleDelete = () => {
+    deleteCrop(selected);
+    setTemp("");
+    setHum("");
+    setSoilMoisture("");
+    setSelected("");
+  };
+
   return (
     <Transition appear show={editDialog} as={Fragment}>
       <Dialog
@@ -94,10 +122,10 @@ const EditDialog = ({ editDialog, setEditDialog }) => {
                       <select
                         id="crops"
                         value={selected}
-                        onChange={handleSelect}
+                        onChange={(e) => setSelected(e.target.value)}
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-400 focus:border-teal-400 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-teal-400 dark:focus:border-teal-400"
                       >
-                        <option selected="">Select Crops</option>
+                        <option selected>Select Crops</option>
                         {data?.map(({ name }) => (
                           <option key={name} value={name}>
                             {name}
@@ -113,10 +141,11 @@ const EditDialog = ({ editDialog, setEditDialog }) => {
                         Temperature
                       </label>
                       <input
-                        type="number"
+                        // type="number"
                         name="temp"
                         id="temp"
-                        // value="Google"
+                        value={temp}
+                        onChange={(e) => setTemp(e.target.value)}
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-400 focus:border-teal-400 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-teal-400 dark:focus:border-teal-400"
                         placeholder="Enter Your Temperature"
                       />
@@ -129,10 +158,11 @@ const EditDialog = ({ editDialog, setEditDialog }) => {
                         Humidity
                       </label>
                       <input
-                        type="number"
-                        //   value="399"
+                        // type="number"
                         name="hum"
                         id="hum"
+                        value={hum}
+                        onChange={(e) => setHum(e.target.value)}
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-400 focus:border-teal-400 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-teal-400 dark:focus:border-teal-400"
                         placeholder="Enter Your Humidity"
                       />
@@ -145,10 +175,11 @@ const EditDialog = ({ editDialog, setEditDialog }) => {
                         Soil Moisture
                       </label>
                       <input
-                        type="number"
-                        //   value="399"
+                        // type="number"
                         name="moisture"
                         id="moisture"
+                        value={soilMoisture}
+                        onChange={(e) => setSoilMoisture(e.target.value)}
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-400 focus:border-teal-400 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-teal-400 dark:focus:border-teal-400"
                         placeholder="Enter Your Soil Moisture"
                       />
@@ -158,15 +189,15 @@ const EditDialog = ({ editDialog, setEditDialog }) => {
                 <div className="flex justify-between mt-4">
                   <button
                     type="button"
-                    className="inline-flex justify-center px-4 py-2 text-sm font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                    onClick={() => setEditDialog(!editDialog)}
+                    className="inline-flex justify-center px-4 py-2 text-sm font-medium text-teal-900 bg-teal-100 border border-transparent rounded-md hover:bg-teal-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                    onClick={handleUpdate}
                   >
                     Update
                   </button>
                   <button
                     type="button"
-                    className="inline-flex justify-center px-4 py-2 text-sm font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                    onClick={() => setEditDialog(!editDialog)}
+                    className="inline-flex justify-center px-4 py-2 text-sm font-medium text-rose-900 bg-rose-100 border border-transparent rounded-md hover:bg-rose-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                    onClick={handleDelete}
                   >
                     <svg
                       class="mr-1 -ml-1 w-5 h-5"

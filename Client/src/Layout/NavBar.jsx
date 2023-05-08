@@ -3,8 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useUserAuth } from "../Contexts/AuthContext";
 const NavBar = ({ menu, setMenu }) => {
   const [userMenu, setUserMenu] = useState(false);
-  const { handleLogout, user, motorStatus, setMotorStatus } = useUserAuth();
-  const [enabled, setEnabled] = useState(false);
+  const { handleLogout, user, motorStatus, setMotorStatus,enabled,setEnabled } = useUserAuth();
 
   useEffect(() => {
     if (enabled) {
