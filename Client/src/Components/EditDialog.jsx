@@ -86,7 +86,7 @@ const EditDialog = ({ editDialog, setEditDialog }) => {
                     as="h3"
                     className="text-lg font-medium leading-6 text-gray-900"
                   >
-                    Update Crops
+                    Edit Crops
                   </Dialog.Title>
                   <button
                     type="button"
@@ -196,7 +196,7 @@ const EditDialog = ({ editDialog, setEditDialog }) => {
                   </button>
                   <button
                     type="button"
-                    className="inline-flex justify-center px-4 py-2 text-sm font-medium text-rose-900 bg-rose-100 border border-transparent rounded-md hover:bg-rose-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                    className="inline-flex justify-center px-4 py-2 text-sm font-medium border border-transparent rounded-md text-rose-900 bg-rose-100 hover:bg-rose-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                     onClick={handleDelete}
                   >
                     <svg
